@@ -1,0 +1,17 @@
+{
+  "RootNamespace":"",
+  "Packages": [
+    "Fuse",
+    "FuseJS"
+  ],
+  "Includes": [
+    "*",
+    "lib/snowboy.java:Java:Android",
+    "lib/SnowboyDetect.java:Java:Android",
+    "lib/snowboyJNI.java:Java:Android",
+    "lib/common.res:Bundle",
+    "lib/snowboy.umdl:Bundle",
+    "lib/ding.wav:Bundle",
+  ]
+}
+

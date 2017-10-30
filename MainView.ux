@@ -1,0 +1,10 @@
+<App>
+	<JavaScript File="MainView.js" />
+
+	<StackPanel>
+		<Text Margin="0,20" Alignment="Center">ListenUp</Text>
+		<Text Alignment="Center" Value="{count}" />
+		<Button Alignment="Center" Clicked="{test}" Text="Test" />
+		<Button Alignment="Center" Clicked="{listen}" Text="Listen" IsEnabled={resReady} />
+	</StackPanel>
+</App>
