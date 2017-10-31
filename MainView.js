@@ -12,15 +12,18 @@ var snowboyUmdlExtracted = Observable(false);
 var dingPath = FileSystem.dataDirectory + '/ding.wav';
 var dingExtracted = Observable(false);
 
-var resReady = Observable(function() {
+var resourcesExtracted = Observable(function() {
 	return commonResExtracted.value && snowboyUmdlExtracted.value && dingExtracted.value;
 });
+
+var canListen = Observable(false);
+
+extractSnowboyResources();
+SnowboySDK.EnsurePerms();
 
 function test() {
 	var result = SnowboySDK.Test();
 	console.dir(result);
-	extractSnowboyResources();
-
 	count.value += 1;
 }
 
@@ -71,6 +74,10 @@ function listen() {
 	SnowboySDK.InitDetector(commonResPath, snowboyUmdlPath);
 }
 
+SnowboySDK.on("canListenChanged", function(change) {
+	console.log("canListenChanged, new value: " + change);
+	canListen.value = change;
+});
 
 
 // function send() {
@@ -93,6 +100,7 @@ function listen() {
 module.exports = {
   count: count,
   test: test,
-  resReady: resReady,
-  listen: listen
+  resourcesExtracted: resourcesExtracted,
+  listen: listen,
+  canListen: canListen
 };

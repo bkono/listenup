@@ -1,10 +1,20 @@
 <App>
 	<JavaScript File="MainView.js" />
+	<Panel ux:Class="MyButton" HitTestMode="LocalBounds" Margin="4" Color="#25a">
+		<string ux:Property="Text" />
+		<float ux:Property="FontSize" />
+		<Text Value="{ReadProperty Text}" FontSize="{ReadProperty FontSize}" Color="#fff" Alignment="Center" Margin="30,15" />
+
+		<WhilePressed>
+			<Change this.Color="#138" Duration="0.05" DurationBack=".2" />
+		</WhilePressed>
+	</Panel>
+
 
 	<StackPanel>
 		<Text Margin="0,20" Alignment="Center">ListenUp</Text>
 		<Text Alignment="Center" Value="{count}" />
-		<Button Alignment="Center" Clicked="{test}" Text="Test" />
-		<Button Alignment="Center" Clicked="{listen}" Text="Listen" IsEnabled={resReady} />
+		<Button Alignment="Center" Margin="0,20" Clicked="{test}" Text="Test" />
+		<Button Alignment="Center" Margin="0,20" Clicked="{listen}" Text="Listen" IsEnabled={canListen} />
 	</StackPanel>
 </App>
