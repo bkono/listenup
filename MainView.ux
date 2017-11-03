@@ -1,20 +1,19 @@
 <App>
+	<iOS.StatusBarConfig Style="Dark" ux:Name="iosStyle" />
+	<Android.StatusBarConfig ux:Name="androidStyle" />
 	<JavaScript File="MainView.js" />
-	<Panel ux:Class="MyButton" HitTestMode="LocalBounds" Margin="4" Color="#25a">
-		<string ux:Property="Text" />
-		<float ux:Property="FontSize" />
-		<Text Value="{ReadProperty Text}" FontSize="{ReadProperty FontSize}" Color="#fff" Alignment="Center" Margin="30,15" />
+	<Panel>
+		<DockPanel>
+			<BottomBarBackground Dock="Bottom" />
+			<StackPanel Alignment="Center" Orientation="Horizontal" Dock="Bottom" Margin="0,0,0,40" Visibility="{instructionsVisibility}">
+				<Text>Say </Text><Text Font="Bold"> Snowboy</Text>
+			</StackPanel>
+			<Button Alignment="Center" Clicked="{listen}" Text="Listen" IsEnabled={isReady} Visibility="{listenVisibility}" Dock="Bottom" />
 
-		<WhilePressed>
-			<Change this.Color="#138" Duration="0.05" DurationBack=".2" />
-		</WhilePressed>
+			<Grid RowCount="2" Rows="1*,2*">
+				<Image File="./Assets/snowboy.png" Margin="0,50,0,0" />
+				<Text Alignment="Center" FontSize="24" Font="Bold" Color="#77CAF1" Value="{detectedText}"/>
+			</Grid>
+		</DockPanel>
 	</Panel>
-
-
-	<StackPanel>
-		<Text Margin="0,20" Alignment="Center">ListenUp</Text>
-		<Text Alignment="Center" Value="{count}" />
-		<Button Alignment="Center" Margin="0,20" Clicked="{test}" Text="Test" />
-		<Button Alignment="Center" Margin="0,20" Clicked="{listen}" Text="Listen" IsEnabled={canListen} />
-	</StackPanel>
 </App>

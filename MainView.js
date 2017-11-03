@@ -17,6 +17,12 @@ var resourcesExtracted = Observable(function() {
 });
 
 var canListen = Observable(false);
+var isReady = Observable(function() {
+	return canListen.value && resourcesExtracted.value;
+});
+var detectedText = Observable("No Hotword Detected");
+var instructionsVisibility = Observable("Hidden");
+var listenVisibility = Observable("Visible");
 
 extractSnowboyResources();
 SnowboySDK.EnsurePerms();
@@ -72,6 +78,7 @@ function extractSnowboyResources() {
 
 function listen() {
 	SnowboySDK.InitDetector(commonResPath, snowboyUmdlPath);
+	SnowboySDK.StartKeywordSpotting();
 }
 
 SnowboySDK.on("canListenChanged", function(change) {
@@ -79,28 +86,38 @@ SnowboySDK.on("canListenChanged", function(change) {
 	canListen.value = change;
 });
 
+SnowboySDK.on("started", function() {
+	console.log("started spotting");
+	listenVisibility.value = "Hidden";
+	instructionsVisibility.value = "Visible";
+});
 
-// function send() {
-//   console.log("starting to send");
-//   MsgMeSDK.Send("client side", "some message");
-//   console.log("sent");
-// }
+SnowboySDK.on("spotted", function(result) {
+	console.log("spotted, result = " + result);
+	detectedText.value = "Hotword Detected!";
+	setTimeout(function() {
+		detectedText.value = "No Hotword Detected";
+	}, 1500);
+});
 
-// function listen() {
-//   console.log("starting to listen");
-//   MsgMeSDK.Listen();
-//   console.log("... listening");
-// }
+SnowboySDK.on("stopped", function() {
+	console.log("stopped spotting");
+	listenVisibility.value = "Visible";
+	instructionsVisibility.value = "Hidden";
+});
 
-// MsgMeSDK.on("messageReceived", function (message) {
-//   console.log("Message received " + message);
-//   messages.add({ content: message });
-// });
+SnowboySDK.on("errored", function() {
+	console.log("error during spotting");
+});
 
 module.exports = {
   count: count,
   test: test,
   resourcesExtracted: resourcesExtracted,
   listen: listen,
-  canListen: canListen
+  canListen: canListen,
+  isReady: isReady,
+  detectedText: detectedText,
+  instructionsVisibility: instructionsVisibility,
+  listenVisibility: listenVisibility
 };

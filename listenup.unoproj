@@ -10,9 +10,12 @@
     "Android/snowboy.java:Java:Android",
     "Android/SnowboyDetect.java:Java:Android",
     "Android/snowboyJNI.java:Java:Android",
+    "Android/SnowboyListener.java:Java:Android",
+    "Android/KeywordSpottingCallback.java:Java:Android",
     "lib/common.res:Bundle",
     "lib/snowboy.umdl:Bundle",
     "lib/ding.wav:Bundle",
+    "Assets/*.png:Bundle",
   ]
 }
 
