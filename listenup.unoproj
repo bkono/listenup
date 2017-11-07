@@ -12,6 +12,8 @@
     "Android/snowboyJNI.java:Java:Android",
     "Android/SnowboyListener.java:Java:Android",
     "Android/KeywordSpottingCallback.java:Java:Android",
+    "iOS/snowboy-detect.h:File:iOS",
+    "iOS/libsnowboy-detect.a:File:iOS",
     "lib/common.res:Bundle",
     "lib/snowboy.umdl:Bundle",
     "lib/ding.wav:Bundle",

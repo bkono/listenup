@@ -16,6 +16,8 @@ This one is nice and simple.
 
 ```
 fuse preview --target=android
+OR
+fuse build --target=iOS -DCOCOAPODS --run
 ```
 
 That'll fire it up loaded onto your connected android device. Once running, click the "listen" button, and as the instructions indicate, "Say Snowboy".

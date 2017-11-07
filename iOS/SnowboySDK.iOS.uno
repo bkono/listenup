@@ -1,4 +1,5 @@
 using Fuse;
+using Fuse.Platform;
 using Fuse.Scripting;
 using Uno;
 using Uno.Permissions;
@@ -9,6 +10,11 @@ using Uno.Compiler.ExportTargetInterop;
 [Require("Cocoapods.Platform.Name", "ios")]
 [Require("Cocoapods.Platform.Version", "10.0")]
 [Require("Cocoapods.Podfile.Target", "pod 'EZAudio'")]
+[Require("LinkDirectory", "@('.':Path)")]
+[Require("IncludeDirectory", "@('.':Path)")]
+[Require("LinkLibrary", "snowboy-detect")]
+[Require("Source.Include", "@('snowboy-detect.h':Path)")]
+[ForeignInclude(Language.ObjC, "AVFoundation/AVFoundation.h")]
 public extern(iOS) class SnowboySDK : NativeEventEmitterModule {
   bool _canListen = false; 
   static readonly SnowboySDK _instance;
@@ -24,7 +30,27 @@ public extern(iOS) class SnowboySDK : NativeEventEmitterModule {
     AddMember(new NativeFunction("StopKeywordSpotting", (NativeCallback)StopKeywordSpotting));
     AddMember(new NativeFunction("CanListen", (NativeCallback)CanListen));
     AddMember(new NativeFunction("EnsurePerms", (NativeCallback)EnsurePerms));
+
+    Lifecycle.Started += Started;
   }
+
+  [Foreign(Language.ObjC)]
+  extern(iOS) void Started(ApplicationState state)
+  @{
+  	AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    [session setMode:AVAudioSessionModeMeasurement error:&error];
+    
+    UInt32 doChangeDefaultRoute = 1;
+    AudioSessionSetProperty(kAudioSessionProperty_OverrideCategoryDefaultToSpeaker, sizeof(doChangeDefaultRoute), &doChangeDefaultRoute);
+    
+    [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
+    if (error) {
+        NSLog(@"ERROR%@", error);
+    }
+  @}
+
 
   object CanListen(Context c, object[] args) {
     return true;
