@@ -27,6 +27,7 @@ var listenVisibility = Observable("Visible");
 extractSnowboyResources();
 setTimeout(function () {
 	SnowboySDK.EnsurePerms();
+	SnowboySDK.InitDetector(commonResPath, snowboyUmdlPath);
 }, 1500);
 
 function test() {
@@ -79,8 +80,6 @@ function extractSnowboyResources() {
 }
 
 function listen() {
-	SnowboySDK.EnsurePerms();
-	SnowboySDK.InitDetector(commonResPath, snowboyUmdlPath);
 	SnowboySDK.StartKeywordSpotting();
 }
 

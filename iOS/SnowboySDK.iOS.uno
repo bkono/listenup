@@ -35,31 +35,7 @@ public extern(iOS) class SnowboySDK : NativeEventEmitterModule {
     AddMember(new NativeFunction("StopKeywordSpotting", (NativeCallback)StopKeywordSpotting));
     AddMember(new NativeFunction("CanListen", (NativeCallback)CanListen));
     AddMember(new NativeFunction("EnsurePerms", (NativeCallback)EnsurePerms));
-
-    Lifecycle.Started += Started;
   }
-
-  [Foreign(Language.ObjC)]
-  extern(iOS) void Started(ApplicationState state)
-  @{
-    NSLog(@"starting Started");
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    NSError *error;
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
-    [session setMode:AVAudioSessionModeMeasurement error:&error];
-    
-    UInt32 doChangeDefaultRoute = 1;
-    AudioSessionSetProperty(kAudioSessionProperty_OverrideCategoryDefaultToSpeaker, sizeof(doChangeDefaultRoute), &doChangeDefaultRoute);
-    
-    [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
-    if (error) {
-        NSLog(@"ERROR%@", error);
-    }
-    NSLog(@"about to alloc the listener started");
-    SnowboyListener* s = [[SnowboyListener alloc] init];
-    @{_listener:Set(s)};
-    NSLog(@"past alloc the listener");
-  @}
 
   object CanListen(Context c, object[] args) {
     return true;
@@ -86,23 +62,18 @@ public extern(iOS) class SnowboySDK : NativeEventEmitterModule {
 
   object EnsurePerms(Context c, object[] args) {
     debug_log "in ensure perms";
-    if(_listener == null) {
-      debug_log "listener still null";
-      return null;
-    }
 
-    EnsurePermsImpl(_listener);
+    EnsurePermsImpl();
     Emit("canListenChanged", true);
 
     return null;
   }
 
   [Foreign(Language.ObjC)]
-  public static void EnsurePermsImpl(ObjC.Object listener) 
+  public static void EnsurePermsImpl() 
   @{
     NSLog(@"in ensure perms impl");
-    SnowboyListener *ls = (SnowboyListener *)listener;
-    [ls initPermissions];
+   [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:nil];
   @}
 
   object StartKeywordSpotting(Context c, object[] args) {
@@ -148,8 +119,23 @@ public extern(iOS) class SnowboySDK : NativeEventEmitterModule {
   [Foreign(Language.ObjC)]
   public static void InitDetectorImpl(ObjC.Object listener, string commonRes, string umdl) 
   @{
-    SnowboyListener *ls = (SnowboyListener *)listener;
-    [ls initSnowboy:commonRes umdlPath:umdl];
-    [ls initMic];
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    [session setMode:AVAudioSessionModeMeasurement error:&error];
+    
+    UInt32 doChangeDefaultRoute = 1;
+    AudioSessionSetProperty(kAudioSessionProperty_OverrideCategoryDefaultToSpeaker, sizeof(doChangeDefaultRoute), &doChangeDefaultRoute);
+    
+    [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
+    if (error) {
+        NSLog(@"ERROR%@", error);
+    }
+    NSLog(@"about to alloc the listener started");
+    SnowboyListener* s = [[SnowboyListener alloc] init];
+    @{_listener:Set(s)};
+    NSLog(@"past alloc the listener");
+    [s initSnowboy:commonRes umdlPath:umdl];
+    [s initMic];
   @}
 }

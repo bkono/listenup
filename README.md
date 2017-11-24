@@ -26,6 +26,7 @@ That'll fire it up loaded onto your connected android device. Once running, clic
 ## Next Steps
 
 - [x] Add iOS counterpart
+- [x] Fix iOS Preview mode bug
 - Clean up any UI oddities
 - Add JS example of creating umdl via the REST API
 
