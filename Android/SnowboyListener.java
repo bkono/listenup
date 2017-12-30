@@ -78,7 +78,7 @@ public class SnowboyListener {
                 if (AudioRecord.ERROR_INVALID_OPERATION != read) {
                     int result = detector.RunDetection(data, data.length);
                     Log.i(TAG, " ----> result = " + result);
-                    if (result < 0) {
+                    if (result == -1) {
                         isRecording = false;
                         callback.onError();
                     } else if (result > 0) {

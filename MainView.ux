@@ -5,10 +5,16 @@
 	<Panel>
 		<DockPanel>
 			<BottomBarBackground Dock="Bottom" />
-			<StackPanel Alignment="Center" Orientation="Horizontal" Dock="Bottom" Margin="0,0,0,40" Visibility="{instructionsVisibility}">
-				<Text>Say </Text><Text Font="Bold"> Snowboy</Text>
+			<StackPanel Orientation="Horizontal" Dock="Bottom" Alignment="Center" ItemSpacing="15">
+				<StackPanel Alignment="Center" Orientation="Horizontal" Margin="0,0,0,40" Visibility="{instructionsVisibility}">
+					<Text>Say </Text><Text Font="Bold"> Snowboy</Text>
+				</StackPanel>
+				<Button Alignment="Center" Clicked="{listen}" Text="Listen" IsEnabled={isReady} Visibility="{listenVisibility}" Dock="Bottom" />
+				<StackPanel Orientation="Horizontal">
+					<Switch Value="{keepListening}" />
+					<Text Margin="10,0" Alignment="Center">Keep Listening?</Text>
+				</StackPanel>
 			</StackPanel>
-			<Button Alignment="Center" Clicked="{listen}" Text="Listen" IsEnabled={isReady} Visibility="{listenVisibility}" Dock="Bottom" />
 
 			<Grid RowCount="2" Rows="1*,2*">
 				<Image File="./Assets/snowboy.png" Margin="0,50,0,0" />
